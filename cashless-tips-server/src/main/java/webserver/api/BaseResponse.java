@@ -8,6 +8,11 @@ public class BaseResponse {
         // default constructor for Jackson
     }
 
+    BaseResponse(String message) {
+        this.code = TemplateResponse.OTHER_ERROR.code;
+        this.message = message;
+    }
+
     BaseResponse(TemplateResponse response) {
         this.code = response.code;
         this.message = response.message;
