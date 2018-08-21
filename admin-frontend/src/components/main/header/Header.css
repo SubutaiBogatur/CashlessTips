@@ -1,0 +1,45 @@
+.header-main {
+    width: 100%;
+    height: 80px;
+    background: #607C8A;
+    display: flex;
+    justify-content: center;
+}
+
+.header-wrapper {
+    width: 965px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header-nav {
+    flex-grow: 1;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-item {
+    padding-right: 45px;
+}
+
+.header-nav a {
+    outline: none;
+    text-decoration: none;
+    display: inline-block;
+    color: #FDFDFD;
+    font-size: 20px;
+}
+
+/*a:hover {*/
+    /*color: darkblue;*/
+/*}*/
+
+.header-control {
+    margin-right: 20px;
+}
+
+.logout-button {
+}
