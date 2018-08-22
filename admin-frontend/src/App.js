@@ -13,9 +13,9 @@ class App extends Component {
     render() {
         return (
             <Switch>
-                <Redirect exact from='/' to='/dashboard'/>
+                <Redirect exact from='/' to='/main'/>
                 <Route exact path='/login' component={LoginForm}/>
-                <PrivateRoute path='/dashboard' component={Main}/>
+                <PrivateRoute path='/' component={Main}/>
                 {/*<Route path='/' component={Page404}/>*/}
             </Switch>
         );

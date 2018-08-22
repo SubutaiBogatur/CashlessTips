@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom';
 import {Paper, Button, FormControl, InputLabel, Input} from '@material-ui/core';
 import './LoginForm.css'
 
-const defaultPath = '/dashboard';
+const defaultPath = '/main';
 
 export class LoginForm extends Component {
 
