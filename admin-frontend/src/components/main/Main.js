@@ -5,6 +5,7 @@ import {BrowserRouter, Redirect} from 'react-router-dom';
 import {Paper, Button, FormControl, InputLabel, Input} from '@material-ui/core';
 import {Route} from "react-router";
 import {Header} from "./header/Header";
+import {MainPage} from "./main-page/MainPage";
 
 export class Main extends Component {
     constructor(props) {
@@ -25,21 +26,20 @@ export class Main extends Component {
                     <div className='header'>
                         <Header logout={() => this.logout()}/>
                     </div>
-                    {/*<Route path='/stats/:type?/:value?/:date?'*/}
-                           {/*render={({match, history}) => <Stats employees={this.state.employees}*/}
-                                                                {/*projects={this.state.projects}*/}
-                                                                {/*match={match}*/}
-                                                                {/*history={history}/>}*/}
-                    {/*/>*/}
-                    {/*<Route path='/employees'*/}
-                           {/*render={() => <Employees employees={this.state.employees}*/}
-                                                    {/*projects={this.state.projects}/>}*/}
-                    {/*/>*/}
-                    {/*<Route path='/projects'*/}
-                           {/*render={() => <Projects projects={this.state.projects}*/}
-                                                   {/*reloadProjects={() => this.loadProjects()}/>}/>*/}
+                    <Route path='/main'
+                           render={() => <MainPage/>}/>
                 </div>
             </BrowserRouter>
         )
     }
 }
+                    // {/*<Route path='/stats/:type?/:value?/:date?'*/}
+                    //        {/*render={({match, history}) => <Stats employees={this.state.employees}*/}
+                    //                                             {/*projects={this.state.projects}*/}
+                    //                                             {/*match={match}*/}
+                    //                                             {/*history={history}/>}*/}
+                    // {/*/>*/}
+                    // {/*/>*/}
+                    // {/*<Route path='/projects'*/}
+                    //        {/*render={() => <Projects projects={this.state.projects}*/}
+                    //                                {/*reloadProjects={() => this.loadProjects()}/>}/>*/}
