@@ -6,6 +6,7 @@ import {Paper, Button, FormControl, InputLabel, Input} from '@material-ui/core';
 import {Route} from "react-router";
 import {Header} from "./header/Header";
 import {MainPage} from "./main-page/MainPage";
+import {Waiters} from "./waiters/Waiters";
 
 export class Main extends Component {
     constructor(props) {
@@ -28,18 +29,10 @@ export class Main extends Component {
                     </div>
                     <Route path='/main'
                            render={() => <MainPage/>}/>
+                    <Route path='/waiters'
+                           render={() => <Waiters/>}/>
                 </div>
             </BrowserRouter>
         )
     }
 }
-                    // {/*<Route path='/stats/:type?/:value?/:date?'*/}
-                    //        {/*render={({match, history}) => <Stats employees={this.state.employees}*/}
-                    //                                             {/*projects={this.state.projects}*/}
-                    //                                             {/*match={match}*/}
-                    //                                             {/*history={history}/>}*/}
-                    // {/*/>*/}
-                    // {/*/>*/}
-                    // {/*<Route path='/projects'*/}
-                    //        {/*render={() => <Projects projects={this.state.projects}*/}
-                    //                                {/*reloadProjects={() => this.loadProjects()}/>}/>*/}
