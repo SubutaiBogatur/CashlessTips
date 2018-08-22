@@ -1,0 +1,21 @@
+.waiter-info-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.waiter-info-top-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.waiter-info-bottom-wrapper {
+    width: 100%;
+    height: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
