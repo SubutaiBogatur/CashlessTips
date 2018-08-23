@@ -1,4 +1,4 @@
-package webserver.api;
+package webserver.controllers.response_utils;
 
 public class BaseResponse {
     private Integer code;
@@ -8,7 +8,12 @@ public class BaseResponse {
         // default constructor for Jackson
     }
 
-    BaseResponse(TemplateResponse response) {
+    public BaseResponse(String message) {
+        this.code = TemplateResponse.OTHER_ERROR.code;
+        this.message = message;
+    }
+
+    public BaseResponse(TemplateResponse response) {
         this.code = response.code;
         this.message = response.message;
     }
