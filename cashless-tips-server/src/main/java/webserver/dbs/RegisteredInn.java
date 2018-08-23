@@ -17,6 +17,9 @@ public class RegisteredInn {
     @Column(name = "row_created_time", nullable = false)
     private Date created;
 
+    @Column(name = "preferred_tips", nullable = false)
+    private Integer preferredTips;
+
     @PrePersist
     protected void onCreate() {
         created = new Date();
@@ -24,5 +27,14 @@ public class RegisteredInn {
 
     public void setInn(String inn) {
         this.inn = inn;
+    }
+
+    public Integer getPreferredTips() {
+        return preferredTips;
+    }
+
+    public void setPreferredTips(Integer preferredTips) {
+        this.preferredTips = preferredTips;
+
     }
 }
