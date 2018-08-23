@@ -16,14 +16,14 @@ import static webserver.api.TemplateResponse.*;
 
 @RestController
 @RequestMapping("/api")
-public class MainApiController {
+public class ApiController {
 
     @Autowired
     private InnRepository innRepository;
     @Autowired
     private KktRepository kktRepository;
 
-    private Logger logger = LoggerFactory.getLogger(MainApiController.class);
+    private Logger logger = LoggerFactory.getLogger(ApiController.class);
 
     @RequestMapping("/registerInn")
     public BaseResponse registerInn(@RequestParam(value = "inn") String inn) {
