@@ -36,6 +36,9 @@ dependencies {
     // For returning html with Thymeleaf
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+//     For building html from md
+    compile 'com.atlassian.commonmark:commonmark:0.2.0'
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.jayway.jsonpath:json-path')
 }

@@ -1,16 +1,20 @@
-package webserver.api;
+package webserver.controllers;
 
+import org.commonmark.html.HtmlRenderer;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 
 @Controller
 @RequestMapping("/api")
@@ -35,12 +39,12 @@ public class ApiDocsController {
         }
 
         if (mdText != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.TEXT_PLAIN);
-            HttpEntity<String> entity = new HttpEntity<>(mdText, headers);
+            Parser parser = Parser.builder().build();
+            Node document = parser.parse(mdText);
+            HtmlRenderer renderer = HtmlRenderer.builder().build();
+            String renderedHtml = renderer.render(document);
 
-            RestTemplate restTemplate = new RestTemplate();
-            return restTemplate.postForEntity(url, entity, String.class);
+            return new ResponseEntity<>(renderedHtml, HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

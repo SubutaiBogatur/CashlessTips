@@ -14,13 +14,40 @@ public class Utils {
         return true;
     }
 
-    public static boolean validateKkt(String kkt) {
-        boolean allDigits = kkt.chars().map(c -> (char) c).allMatch(Character::isDigit);
+    public static boolean validateFn(String fn) {
+        boolean allDigits = fn.chars().map(c -> (char) c).allMatch(Character::isDigit);
         if (!allDigits) {
             return false;
         }
 
-        if (kkt.length() > 18) {
+        if (fn.length() > 18) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateFd(String fd) {
+        boolean allDigits = fd.chars().map(c -> (char) c).allMatch(Character::isDigit);
+        if (!allDigits) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateFp(String fp) {
+        boolean allDigits = fp.chars().map(c -> (char) c).allMatch(Character::isDigit);
+        if (!allDigits) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateN(String n) {
+        // we currently know nothing about allowed n, but it is expected, that it is not long
+        if (n.length() > 3) {
             return false;
         }
 

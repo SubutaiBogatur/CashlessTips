@@ -1,4 +1,4 @@
-package webserver.api;
+package webserver.controllers.response_utils;
 
 /**
  * Class not for json, just for nice templates
