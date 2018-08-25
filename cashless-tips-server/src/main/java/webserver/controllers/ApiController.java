@@ -9,20 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import webserver.controllers.response_utils.BaseResponse;
-import webserver.controllers.response_utils.TipsServerException;
+import webserver.controllers.error_handling.TipsServerException;
+import webserver.controllers.exposed_models.ExposedRegisteredFn;
 import webserver.dbs.*;
 import webserver.utils.Utils;
 
-import javax.rmi.CORBA.Util;
-import javax.xml.ws.Response;
-
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static webserver.controllers.response_utils.TemplateResponse.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -86,7 +79,7 @@ public class ApiController {
     }
 
     @RequestMapping("/getFnInfo")
-    public RegisteredFn getFnInfo(@RequestParam(value = "fn") String fn) throws TipsServerException {
+    public ExposedRegisteredFn getFnInfo(@RequestParam(value = "fn") String fn) throws TipsServerException {
         boolean correctInput = Utils.validateFn(fn);
         if (!correctInput) {
             throw TipsServerException.invalidArguments();
@@ -96,7 +89,31 @@ public class ApiController {
             throw new TipsServerException("This fnn was not registered");
         }
 
-        return fnRepository.getByFn(fn);
+        RegisteredFn registeredFn = fnRepository.getByFn(fn);
+        if (registeredFn == null) {
+            throw new TipsServerException("Unknown internal server error occured");
+        }
+
+        return registeredFn.convertToExposed();
+    }
+
+    @RequestMapping("/listFnByInn")
+    public List<ExposedRegisteredFn> listFnByInn(@RequestParam(value = "inn") String inn) throws TipsServerException {
+        boolean correctInput = Utils.validateInn(inn);
+        if (!correctInput) {
+            throw TipsServerException.invalidArguments();
+        }
+
+        if (!innRepository.existsByInn(inn)) {
+            throw new TipsServerException("This inn was not registered");
+        }
+
+        List<RegisteredFn> registeredFns = fnRepository.getAllByInn(inn);
+        if (registeredFns == null) {
+            throw new TipsServerException("Unknown null server error occurred");
+        }
+
+        return registeredFns.stream().map(RegisteredFn::convertToExposed).collect(Collectors.toList());
     }
 
     @RequestMapping("/registerReceipt")

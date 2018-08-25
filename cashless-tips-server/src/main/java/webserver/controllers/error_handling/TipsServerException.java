@@ -1,4 +1,4 @@
-package webserver.controllers.response_utils;
+package webserver.controllers.error_handling;
 
 public class TipsServerException extends Exception {
     public TipsServerException(String msg) {

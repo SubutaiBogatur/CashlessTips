@@ -15,9 +15,11 @@ eg: `evarand.rocks/api/regiserInn?inn=100500`
 Заводской номер фискального накопителя единственным образом идентифицирует кассовый аппарат.
 Подробно про фискальные накопители можно почитать по ссылке: http://spb-kassa.ru/FAQ/%D1%87%D1%82%D0%BE_%D1%82%D0%B0%D0%BA%D0%BE%D0%B5_%D1%84%D0%B8%D1%81%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BD%D0%B0%D0%BA%D0%BE%D0%BF%D0%B8%D1%82%D0%B5%D0%BB%D1%8C.html
 
-* `getFnInfo(fn : String) : FnStructure` -- получить `inn` по номеру фискального накопителя. В случае, если накопитель не зарегистрирован,
+* `getFnInfo(fn : String) : ExposedFn` -- получить `inn` по номеру фискального накопителя. В случае, если накопитель не зарегистрирован,
 возвращается ошибка. Следует вызывать перед регистрацией чека, чтобы убедиться, что предприниматель, выпустивший чек, 
 подключен к системе `kitek-superbot-3018-cyber`.
+
+* `listFnByInn(inn : String) : List<ExposedFn>` -- получить список всех `fn` зарегистрированных для этого `inn`.
 
 * `registerReceipt(receiptTime : Int, sum : Long, fn : String, fd : String, fp : String, n : String) : Void` -- зарегистрировать чек. 
 Про данные на чеке можно почитать: https://www.klerk.ru/buh/articles/463067/ .

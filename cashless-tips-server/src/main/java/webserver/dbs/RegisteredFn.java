@@ -1,5 +1,7 @@
 package webserver.dbs;
 
+import webserver.controllers.exposed_models.ExposedRegisteredFn;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -48,6 +50,10 @@ public class RegisteredFn {
 
     public Date getCreated() {
         return this.created;
+    }
 
+    // should be used when exposing data to public for safety
+    public ExposedRegisteredFn convertToExposed() {
+        return new ExposedRegisteredFn(inn, fn);
     }
 }
