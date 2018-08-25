@@ -1,4 +1,4 @@
-package webserver.controllers;
+package webserver.controllers.error_handling;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
