@@ -7,6 +7,7 @@ import {Route} from "react-router";
 import {Header} from "./header/Header";
 import {MainPage} from "./main-page/MainPage";
 import {Waiters} from "./waiters/Waiters";
+import {Kkts} from "./kkts/Kkts";
 
 export class Main extends Component {
     constructor(props) {
@@ -31,6 +32,8 @@ export class Main extends Component {
                            render={() => <MainPage/>}/>
                     <Route path='/waiters'
                            render={() => <Waiters/>}/>
+                    <Route path='/kkts'
+                           render={() => <Kkts/>}/>
                 </div>
             </BrowserRouter>
         )

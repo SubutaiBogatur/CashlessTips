@@ -1,14 +1,14 @@
-.edit-dialog-data-wrapper {
+.add-waiter-data-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.edit-dialog-name {
+.add-waiter-name {
     width: 40%;
 }
 
-.edit-dialog-card-number {
+.add-waiter-card-number {
     width: 55%;
 }

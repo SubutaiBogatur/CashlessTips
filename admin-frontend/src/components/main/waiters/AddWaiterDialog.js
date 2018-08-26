@@ -27,21 +27,21 @@ export class AddWaiterDialog extends Component {
         return (
             <Dialog open={this.props.open}
                     onClose={this.props.handleClose}
-                    aria-labelledby='form-dialog-title'>
-                <DialogTitle id='form-dialog-title'>Добавить официанта</DialogTitle>
-                <DialogContent className='dialog'>
+                    aria-labelledby='add-waiter-title'>
+                <DialogTitle id='add-waiter-title'>Добавить официанта</DialogTitle>
+                <DialogContent className='add-waiter-dialog'>
                     <DialogContentText>
                         Введите имя официанта и номер его карты. Если вы не привяжете карту официанта или с ней что-то
                         пойдет не так, мы переведем его чаевые на общую карту.
                     </DialogContentText>
-                    <div className='edit-dialog-data-wrapper'>
+                    <div className='add-waiter-data-wrapper'>
                         <TextField autoFocus
                                    className='edit-dialog-name'
                                    value={this.state.name}
                                    margin='dense'
                                    onChange={event => this.setState({name: event.target.value})}
                                    label='Имя официанта'/>
-                        <TextField className='edit-dialog-card-number'
+                        <TextField className='add-waiter-card-number'
                                    value={this.state.cardNumber}
                                    margin='dense'
                                    onChange={event => this.setState({cardNumber: event.target.value})}
