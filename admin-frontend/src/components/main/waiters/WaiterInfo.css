@@ -17,5 +17,9 @@
     margin-top: 20px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
+}
+
+.waiter-info-card-number {
+    width: 55%;
 }

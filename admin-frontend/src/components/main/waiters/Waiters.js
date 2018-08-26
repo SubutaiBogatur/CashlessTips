@@ -2,11 +2,14 @@ import React, {Component} from 'react';
 import './Waiters.css'
 import {WaiterInfo} from "./WaiterInfo";
 import {Button} from "@material-ui/core";
+import {AddWaiterDialog} from "./AddWaiterDialog";
 
 export class Waiters extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            addDialogOpen: false
+        }
     }
 
     loadWaiters() {
@@ -35,7 +38,7 @@ export class Waiters extends Component {
                 <div className='waiters-wrapper'>
                     <div className='waiters-add-button'>
                         <Button variant='raised'
-                                onClick={() => alert('add waiter is wip')}>
+                                onClick={() => this.setState({addDialogOpen: true})}>
                             Добавить официанта
                         </Button>
                     </div>
@@ -45,6 +48,8 @@ export class Waiters extends Component {
                         )}
                     </div>
                 </div>
+                <AddWaiterDialog open={this.state.addDialogOpen}
+                                 handleClose={() => this.setState({addDialogOpen: false})}/>
             </div>
         )
     }

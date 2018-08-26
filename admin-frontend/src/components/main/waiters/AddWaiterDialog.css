@@ -1,0 +1,14 @@
+.edit-dialog-data-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-dialog-name {
+    width: 40%;
+}
+
+.edit-dialog-card-number {
+    width: 55%;
+}

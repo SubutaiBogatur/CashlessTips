@@ -18,31 +18,34 @@ export class WaiterInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isEditingCard: true,
-            cardNumber: this.props.waiter.cardNumber
+            cardNumber: this.props.waiter.cardNumber,
         }
     }
 
+    validateCardNumber() {
+        return true; // TODO
+    }
+
+    save() {
+        alert('actual connection to server is wip')
+    }
+
     renderCardNumber() {
-        if (this.state.isEditingCard) {
-            return (
-                <div className='waiter-info-bottom-wrapper'>
-                    <TextField/>
-                    <Button variant='raised'>
-                        Сохранить
-                    </Button>
-                </div>
-            )
-        } else if (this.props.waiter.card_number !== null) {
-            // TODO display card number
-        } else {
-            // TODO display 'add card' button
-        }
+        return (
+            <div className='waiter-info-bottom-wrapper'>
+                <TextField className='waiter-info-card-number'
+                           value={this.state.cardNumber}
+                           margin='dense'
+                           onChange={event => this.setState({ cardNumber: event.target.value })}
+                           label='Номер карты'/>
+            </div>
+            // TODO add hint
+        )
     }
 
     render() {
         return (
-            <ExpansionPanel className='waiter-info-expansion-panel' defaultExpanded>
+            <ExpansionPanel className='waiter-info-expansion-panel'>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
                     <div>
                         <Typography variant='subheading' style={{fontSize: '20px'}}>
@@ -72,7 +75,7 @@ export class WaiterInfo extends Component {
                             color='primary'
                             // disabled={!this.somethingChanged()}
                             onClick={() => this.save()}>
-                        Save
+                        Сохранить
                     </Button>
                 </ExpansionPanelActions>
             </ExpansionPanel>
