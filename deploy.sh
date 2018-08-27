@@ -5,9 +5,9 @@ ROOT_DIR=$(pwd)
 BACKEND_DIR=/var/www/cashlesstips/backend
 FRONTEND_DIR=/var/www/cashlesstips/frontend
 STATIC_DIR=/var/www/cashlesstips/static
-rm -r $BACKEND_DIR 2> /dev/null
-rm -r $FRONTEND_DIR 2> /dev/null
-rm -r $STATIC_DIR 2> /dev/null
+rm -r $BACKEND_DIR 2> /dev/null || true
+rm -r $FRONTEND_DIR 2> /dev/null || true
+rm -r $STATIC_DIR 2> /dev/null || true
 mkdir -p $BACKEND_DIR
 mkdir -p $FRONTEND_DIR
 mkdir -p $STATIC_DIR
