@@ -30,4 +30,4 @@ cp -r $FRONTEND_DIR/build/* $STATIC_DIR
 rm $STATIC_DIR/index.html
 
 echo restarting cashlesstips...
-supervisorctl restart cashlesstips
+supervisorctl restart cashless-tips
