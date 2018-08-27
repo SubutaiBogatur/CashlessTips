@@ -12,7 +12,7 @@ public class CustomErrorController implements ErrorController {
 
     private Logger logger = LoggerFactory.getLogger(CustomErrorController.class);;
 
-    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String handleError() {
         logger.info("Displaying error message");
 
