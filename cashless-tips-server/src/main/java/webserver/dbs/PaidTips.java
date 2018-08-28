@@ -49,6 +49,6 @@ public class PaidTips {
     }
 
     public ExposedFeedback convertToExposedFeedback() {
-        return new ExposedFeedback(rate, comment);
+        return new ExposedFeedback(rate, comment, waiterId);
     }
 }
