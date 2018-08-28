@@ -8,10 +8,14 @@ eg: `evarand.rocks/api/regiserInn?inn=100500`
 
 Методы:
 
-* `regiserInn(inn : String, preferredTips : Int?) : Void` -- следует регистрировать `inn` с помощью этого запроса до использования `inn` в любом другом запросе. 
-`preferredTips` -- предпочитаемый процент чаевых в отрезке `[0; 100]`.
+* `setInnInfo(inn : String, preferredTips : Int?, cardNumber : String?) : Void` -- следует регистрировать `inn` с помощью этого запроса до использования `inn` в любом другом запросе. 
+Также для уже зарегистрированного `inn` с помощью этого запроса можно менять его данные.
+`preferredTips` -- предпочитаемый процент чаевых в отрезке `[0; 100]`. `cardNumber` -- номер кредитной карты, на которую будет совершаться перевод чаевых
+в случае перевода чаевых не конкретному официанту, а организации.
 
-* `registerFn(inn : String, fn : String) : Void` -- привязать номер фискального накопителя `= fn` к конкретному `inn`. 
+* `getInnInfo(inn : String) : ExposedInn` -- получить информацию (в частности, номер карты) по `inn`
+
+* `setFnInfo(inn : String, fn : String) : Void` -- привязать номер фискального накопителя `= fn` к конкретному `inn`. 
 Заводской номер фискального накопителя единственным образом идентифицирует кассовый аппарат.
 Подробно про фискальные накопители можно почитать по ссылке: http://spb-kassa.ru/FAQ/%D1%87%D1%82%D0%BE_%D1%82%D0%B0%D0%BA%D0%BE%D0%B5_%D1%84%D0%B8%D1%81%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BD%D0%B0%D0%BA%D0%BE%D0%BF%D0%B8%D1%82%D0%B5%D0%BB%D1%8C.html
 
@@ -20,6 +24,11 @@ eg: `evarand.rocks/api/regiserInn?inn=100500`
 подключен к системе `kitek-superbot-3018-cyber`.
 
 * `listFnByInn(inn : String) : List<ExposedFn>` -- получить список всех `fn` зарегистрированных для этого `inn`.
+
+* `setWaiter(inn : String, name : String, cardNumber : String?) : Void` -- добавить официанта для того, чтобы была возможность переводить
+ему затем чаевые напрямую.
+
+* `listWaitersByInn(inn : String) : List<ExposedWaiter>` -- получить всех зарегистрированных для этого `inn` официантов
 
 * `registerReceipt(receiptTime : Int, sum : Long, fn : String, fd : String, fp : String, n : String) : Void` -- зарегистрировать чек. 
 Про данные на чеке можно почитать: https://www.klerk.ru/buh/articles/463067/ .
@@ -33,7 +42,9 @@ eg: `evarand.rocks/api/regiserInn?inn=100500`
   * `fp : String` -- фискальный признак фискального документа -- фактически, хеш транзакции, посчитанный фискальным накопителем
   * `n : String` -- признак расчета (приход / расход / возврат) -- обычно `1` = приход  
   
-* `payTips(inn : String, amount : Long) : Void` -- заплатить чаевые. Сумма, конечно, в грошах.
+* `payTips(inn : String, amount : Long, rate : Int?, comment : String?, waiterId : Int?) : Void` -- заплатить чаевые. Сумма, конечно, в грошах.
+`rate` -- целое число в отрезке от [1; 5] (границы включительно) -- оценка посетителя. `waiterId` -- конкретный официант, кому стоит перевести
+чаевые. 
 
-* `getPreferredTipsRate(inn : String) : Int` -- возвращает предпочитаемый предпринимателем процент чаевых
+* `listFeedbackByInn(inn : String) : ExposedFeedback` -- возвращает все оценки и комментарии, выставленные пользователями этому заведению
  

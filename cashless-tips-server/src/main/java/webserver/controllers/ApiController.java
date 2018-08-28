@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import webserver.controllers.error_handling.TipsServerException;
+import webserver.controllers.exposed_models.ExposedFeedback;
 import webserver.controllers.exposed_models.ExposedRegisteredFn;
+import webserver.controllers.exposed_models.ExposedRegisteredInn;
+import webserver.controllers.exposed_models.ExposedWaiter;
 import webserver.dbs.*;
 import webserver.utils.Utils;
 
@@ -27,13 +30,18 @@ public class ApiController {
     private FnRepository fnRepository;
     @Autowired
     private ReceiptRepository receiptRepository;
+    @Autowired
+    private WaiterRepository waiterRepository;
+    @Autowired
+    private TipsRepository tipsRepository;
 
     private Logger logger = LoggerFactory.getLogger(ApiController.class);
 
-    @RequestMapping("/registerInn")
-    public ResponseEntity<Object> registerInn(@RequestParam(value = "inn") String inn, @RequestParam(value = "preferredTips", defaultValue = "10") Integer preferredTips) throws TipsServerException {
-        boolean correctInput = Utils.validateInn(inn);
-        if (!correctInput) {
+    @RequestMapping("/setInnInfo")
+    public ResponseEntity<Object> setInnInfo(@RequestParam(value = "inn") String inn,
+                                             @RequestParam(value = "preferredTips", defaultValue = "10") Integer preferredTips,
+                                             @RequestParam(value = "cardNumber", required = false) String cardNumber) throws TipsServerException {
+        if (!Utils.validateInn(inn) || !Utils.validateCardNumber(cardNumber)) {
             throw TipsServerException.invalidArguments();
         }
 
@@ -45,36 +53,60 @@ public class ApiController {
             throw new TipsServerException("Such inn was already registered");
         }
 
-        RegisteredInn innEntity = new RegisteredInn();
-        innEntity.setInn(inn);
-        innEntity.setPreferredTips(preferredTips);
+        if (innRepository.existsByInn(inn)) {
+            // firstly delete old record
+            RegisteredInn innEntity = innRepository.getByInn(inn);
+            innRepository.deleteById(innEntity.getId());
+        }
+
+        // registering new
+        RegisteredInn innEntity = new RegisteredInn(inn, preferredTips, cardNumber);
         innRepository.save(innEntity);
 
         logger.info("Succesfully added inn " + inn + " to db");
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    @RequestMapping("/registerFn")
-    public ResponseEntity<Object> registerFn(@RequestParam(value = "inn") String inn, @RequestParam(value = "fn") String fn) throws TipsServerException {
-        boolean correctInput = Utils.validateInn(inn) && Utils.validateFn(fn);
-        if (!correctInput) {
+    @RequestMapping("/getInnInfo")
+    public ExposedRegisteredInn getInnInfo(@RequestParam(value = "inn") String inn) throws TipsServerException {
+        if (!Utils.validateFn(inn)) {
             throw TipsServerException.invalidArguments();
         }
 
-        if (fnRepository.existsByFn(fn)) {
-            throw new TipsServerException("Such fnn already exists");
+        if (!innRepository.existsByInn(inn)) {
+            throw new TipsServerException("This inn was not registered");
+        }
+
+        RegisteredInn registeredInn = innRepository.getByInn(inn);
+        if (registeredInn == null) {
+            throw new TipsServerException("Unknown internal server error occured");
+        }
+
+        return registeredInn.convertToExposed();
+    }
+
+    @RequestMapping("/setFnInfo")
+    public ResponseEntity<Object> setFnInfo(@RequestParam(value = "inn") String inn, @RequestParam(value = "fn") String fn) throws TipsServerException {
+        if (!Utils.validateInn(inn) || !Utils.validateFn(fn)) {
+            throw TipsServerException.invalidArguments();
         }
 
         if (!innRepository.existsByInn(inn)) {
             throw new TipsServerException("Such inn was not registered");
         }
 
-        RegisteredFn kktEntity = new RegisteredFn();
-        kktEntity.setInn(inn);
-        kktEntity.setFn(fn);
-        fnRepository.save(kktEntity);
+        if (fnRepository.existsByFn(fn)) {
+            // editing:
+            RegisteredFn fnEntity = fnRepository.getByFn(fn);
+            fnRepository.deleteById(fnEntity.getId());
+        }
 
-        logger.info("Succesfully added kkt: (inn, kkt): (" + inn + ", " + fn + ") to db");
+        RegisteredFn fnEntity = new RegisteredFn();
+        fnEntity.setInn(inn);
+        fnEntity.setFn(fn);
+        fnRepository.save(fnEntity);
+
+        logger.info("Succesfully added fn: (inn, fn): (" + inn + ", " + fn + ") to db");
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
@@ -116,6 +148,49 @@ public class ApiController {
         return registeredFns.stream().map(RegisteredFn::convertToExposed).collect(Collectors.toList());
     }
 
+    @RequestMapping("/setWaiter")
+    public ResponseEntity<Object> setWaiter(@RequestParam(value = "inn") String inn,
+                                            @RequestParam(value = "name") String name,
+                                            @RequestParam(value = "name", required = false) String cardNumber) throws TipsServerException {
+        if (!Utils.validateInn(inn) || !Utils.validateCardNumber(cardNumber)) {
+            throw TipsServerException.invalidArguments();
+        }
+
+        if (!innRepository.existsByInn(inn)) {
+            throw new TipsServerException("Such inn was not registered");
+        }
+
+        if (waiterRepository.existsByInnAndName(inn, name)) {
+            // editing:
+            RegisteredWaiter waiterEntity = waiterRepository.getByInnAndName(inn, name);
+            waiterRepository.deleteById(waiterEntity.getId());
+        }
+
+        RegisteredWaiter waiterEntity = new RegisteredWaiter(inn, name, cardNumber);
+        waiterRepository.save(waiterEntity);
+
+        logger.info("Succesfully added waiter: (inn, name, cardnumber): (" + inn + ", " + name + ", " + cardNumber + ") to db");
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+    @RequestMapping("/listWaitersByInn")
+    public List<ExposedWaiter> listWaitersByInn(@RequestParam(value = "inn") String inn) throws TipsServerException {
+        if (!Utils.validateInn(inn)) {
+            throw TipsServerException.invalidArguments();
+        }
+
+        if (!innRepository.existsByInn(inn)) {
+            throw new TipsServerException("This inn was not registered");
+        }
+
+        List<RegisteredWaiter> registeredWaiters = waiterRepository.getAllByInn(inn);
+        if (registeredWaiters == null) {
+            throw new TipsServerException("Unknown null server error occurred");
+        }
+
+        return registeredWaiters.stream().map(RegisteredWaiter::convertToExposed).collect(Collectors.toList());
+    }
+
     @RequestMapping("/registerReceipt")
     public ResponseEntity<Object> registerReceipt(@RequestParam(value = "receiptTime") Integer receiptTime,
                                                   @RequestParam(value = "sum") Long sum,
@@ -144,32 +219,41 @@ public class ApiController {
     }
 
     @RequestMapping("/payTips")
-    public ResponseEntity<Object> payTips(@RequestParam(value = "inn") String inn, @RequestParam(value = "amount") Long amount) throws TipsServerException {
-        if (!Utils.validateInn(inn)) {
+    public ResponseEntity<Object> payTips(@RequestParam(value = "inn") String inn,
+                                          @RequestParam(value = "amount") Long amount,
+                                          @RequestParam(value = "rate", required = false) Integer rate,
+                                          @RequestParam(value = "comment", required = false) String comment,
+                                          @RequestParam(value = "waiter_id", required = false) Integer waiter_id) throws TipsServerException {
+        if (!Utils.validateInn(inn) || rate != null && !Utils.validateRate(rate)) {
             throw TipsServerException.invalidArguments();
         }
 
         if (!innRepository.existsByInn(inn)) {
             throw new TipsServerException("Inn is not registered in our system");
         }
+
+        PaidTips tipsEntity = new PaidTips(inn, amount, waiter_id, rate, comment);
+        tipsRepository.save(tipsEntity);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getPreferredTipsRate", method = RequestMethod.GET, produces = "application/json")
-    public Map<String, Integer> getPreferredTipsRate(@RequestParam(value = "inn") String inn) throws TipsServerException {
+    @RequestMapping("/listFeedbackByInn")
+    public List<ExposedFeedback> listFeedbackByInn(@RequestParam(value = "inn") String inn) throws TipsServerException {
         if (!Utils.validateInn(inn)) {
             throw TipsServerException.invalidArguments();
         }
 
         if (!innRepository.existsByInn(inn)) {
-            throw new TipsServerException("Inn is not registered in our system");
+            throw new TipsServerException("This inn was not registered");
         }
 
-        RegisteredInn registeredInn = innRepository.getByInn(inn);
-        Integer preferredTips = registeredInn.getPreferredTips();
+        List<PaidTips> paidTips = tipsRepository.getAllByInn(inn);
+        if (paidTips == null) {
+            throw new TipsServerException("Unknown null server error occurred");
+        }
 
-        return Collections.singletonMap("preferred_tips", preferredTips);
+        return paidTips.stream().map(PaidTips::convertToExposedFeedback).collect(Collectors.toList());
     }
 
 }
