@@ -53,4 +53,12 @@ public class Utils {
 
         return true;
     }
+
+    public static boolean validateCardNumber(String cardNumber) {
+        return true;
+    }
+
+    public static boolean validateRate(Integer rate) {
+        return rate >= 1 && rate <= 5;
+    }
 }
