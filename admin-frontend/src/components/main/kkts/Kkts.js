@@ -72,11 +72,11 @@ export class Kkts extends Component {
                                         //     null : 'Manager chat: ' + project.manager_chat.title}
                                     />
                                     <ListItemSecondaryAction>
-                                        <IconButton aria-label='Delete'
-                                            // onClick={() => this.handleDeleteButton(project)}
-                                        >
-                                            <DeleteIcon/>
-                                        </IconButton>
+                                        {/*<IconButton aria-label='Delete'*/}
+                                            {/*// onClick={() => this.handleDeleteButton(project)}*/}
+                                        {/*>*/}
+                                            {/*<DeleteIcon/>*/}
+                                        {/*</IconButton>*/}
                                     </ListItemSecondaryAction>
                                 </ListItem>,
                                 i === arr.length - 1 ? null : <Divider key={kkt.id + '_divider'} inset component='li'/>

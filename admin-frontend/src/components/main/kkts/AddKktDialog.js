@@ -16,6 +16,7 @@ export class AddKktDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            errorDialogOpen: false,
             number: ''
         }
     }
@@ -26,14 +27,20 @@ export class AddKktDialog extends Component {
                 inn: Auth.getUsername(),
                 fn: this.state.number
             }
-        }).then(res => {
-            console.log(res)
+        }).then(result => {
+            this.props.updateKkts();
+            this.props.handleClose();
+        }, error => {
+            this.setState({
+                errorDialogOpen: true
+            });
         })
     }
 
     render() {
-        return (
-            <Dialog open={this.props.open}
+        return ([
+            <Dialog key='main-dialog'
+                    open={this.props.open}
                     onClose={this.props.handleClose}
                     aria-labelledby='add-kkt-title'>
                 <DialogTitle id='add-kkt-title'>Добавить ККТ</DialogTitle>
@@ -57,14 +64,26 @@ export class AddKktDialog extends Component {
                     </Button>
                     <Button onClick={() => {
                         this.save();
-                        this.props.handleClose();
-                        this.props.updateKkts();
                     }}
                             color='primary'>
                         Сохранить
                     </Button>
                 </DialogActions>
+            </Dialog>,
+            <Dialog key='err-dialog'
+                    open={this.state.errorDialogOpen}
+                    onClose={() => this.setState({errorDialogOpen: false})}
+                    aria-labelledby='alert-dialog-title'
+                    aria-describedby='alert-dialog-description'>
+                <DialogTitle id='alert-dialog-title'>
+                    Неверный формат ФН!
+                </DialogTitle>
+                <DialogActions>
+                    <Button onClick={() => this.setState({errorDialogOpen: false})} color='primary'>
+                        ОК
+                    </Button>
+                </DialogActions>
             </Dialog>
-        )
+        ])
     }
 }

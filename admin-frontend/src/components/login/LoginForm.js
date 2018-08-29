@@ -2,7 +2,18 @@ import React, {Component} from 'react';
 import axios from 'axios'
 import {Auth} from '../../util/Auth';
 import {Redirect} from 'react-router-dom';
-import {Paper, Button, FormControl, InputLabel, Input, Tab, Tabs, AppBar} from '@material-ui/core';
+import {
+    Paper,
+    Button,
+    FormControl,
+    InputLabel,
+    Input,
+    Tab,
+    Tabs,
+    AppBar,
+    DialogTitle,
+    DialogActions, Dialog
+} from '@material-ui/core';
 import './LoginForm.css'
 
 const defaultPath = '/main';
@@ -12,6 +23,7 @@ export class LoginForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            errorDialogOpen: false,
             type: 0,
             inn: '',
             password: ''
@@ -37,7 +49,9 @@ export class LoginForm extends Component {
                 Auth.saveCredentials(this.state.inn, 'token');
                 this.props.history.push(defaultPath)
             }, error => {
-                console.log(error)
+                this.setState({
+                    errorDialogOpen: true
+                })
             });
     }
 
@@ -94,6 +108,19 @@ export class LoginForm extends Component {
                         {this.state.type === 0 ? 'Войти' : 'Зарегистрироваться'}
                     </Button>
                 </Paper>
+                <Dialog open={this.state.errorDialogOpen}
+                        onClose={() => this.setState({errorDialogOpen: false})}
+                        aria-labelledby='alert-dialog-title'
+                        aria-describedby='alert-dialog-description'>
+                    <DialogTitle id='alert-dialog-title'>
+                        Такой ИНН ещё не зарегистрирован!
+                    </DialogTitle>
+                    <DialogActions>
+                        <Button onClick={() => this.setState({errorDialogOpen: false})} color='primary'>
+                            ОК
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }

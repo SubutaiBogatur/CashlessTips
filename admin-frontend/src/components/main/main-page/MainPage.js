@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, Typography, Button, Divider, TextField} from '@material-ui/core';
+import {Paper, Typography, Button, Divider, TextField, Dialog, DialogTitle, DialogActions} from '@material-ui/core';
 import './MainPage.css';
 import axios from 'axios';
 import {Auth} from "../../../util/Auth";
@@ -8,6 +8,8 @@ export class MainPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            okDialogOpen: false,
+            prevCardNumber: '',
             cardNumber: ''
         }
     }
@@ -22,8 +24,10 @@ export class MainPage extends Component {
                 inn: Auth.getUsername()
             }
         }).then(result => {
+            const cardNumber = result.data.cardNumber === null ? '' : result.data.cardNumber;
             this.setState({
-                cardNumber: result.data.cardNumber === null ? '' : result.data.cardNumber
+                prevCardNumber: cardNumber,
+                cardNumber: cardNumber
             })
         })
     }
@@ -34,6 +38,11 @@ export class MainPage extends Component {
                 inn: Auth.getUsername(),
                 cardNumber: this.state.cardNumber
             }
+        }).then(result => {
+            this.setState({
+                okDialogOpen: true,
+                prevCardNumber: this.state.cardNumber
+            });
         })
     }
 
@@ -50,7 +59,7 @@ export class MainPage extends Component {
                             </Typography>
                             <br/>
                             <Typography component='p' style={{fontSize: '18px'}}>
-                                Чтобы настроить работу с безналичными чаевыми через наш сервис Вам нужно:
+                                Чтобы настроить работу с безналичными чаевыми через наш сервис, Вам нужно:
                                 1. Добавить список своих ККТ (контрольно-кассовых техник) через вкладку “ККТ”
                                 2. Добавить официантов через вкладку “Официанты”
 
@@ -71,7 +80,8 @@ export class MainPage extends Component {
                             </div>
                             <Divider/>
                             <div className='main-page-card-block-wrapper'>
-                                {this.state.cardNumber === '' &&
+                                {this.state.prevCardNumber
+                                === '' &&
                                 <Typography component='p' style={{fontSize: '18px'}}>
                                     Вы еще не ввели номер карты, безналичные чаевые пока недоступны!
                                 </Typography>}
@@ -91,6 +101,19 @@ export class MainPage extends Component {
                         </div>
                     </Paper>
                 </div>
+                <Dialog open={this.state.okDialogOpen}
+                        onClose={() => this.setState({okDialogOpen: false})}
+                        aria-labelledby='alert-dialog-title'
+                        aria-describedby='alert-dialog-description'>
+                    <DialogTitle id='alert-dialog-title'>
+                        Номер карты сохранён
+                    </DialogTitle>
+                    <DialogActions>
+                        <Button onClick={() => this.setState({okDialogOpen: false})} color='primary'>
+                            Хорошо
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }
