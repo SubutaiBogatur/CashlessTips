@@ -10,7 +10,6 @@ import {
     Input,
     Tab,
     Tabs,
-    AppBar,
     DialogTitle,
     DialogActions, Dialog
 } from '@material-ui/core';
