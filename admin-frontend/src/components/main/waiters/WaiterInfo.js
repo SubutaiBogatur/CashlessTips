@@ -68,7 +68,7 @@ export class WaiterInfo extends Component {
                     <div className='waiter-info-top-wrapper'>
                         <div className='waiter-info-rating-wrapper'>
                             <Typography component='p' style={{fontSize: '18px'}}>
-                                Средний рейтинг: {this.props.waiter.rating}/5
+                                Средний рейтинг: {this.props.waiterInfo === undefined ? 'ещё неизвестен' : this.props.waiterInfo.avRate + ' / 5'}
                             </Typography>
                         </div>
                         <div className='waiter-info-tips-wrapper'>

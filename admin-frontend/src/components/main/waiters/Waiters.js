@@ -11,7 +11,8 @@ export class Waiters extends Component {
         super(props);
         this.state = {
             addDialogOpen: false,
-            waiters: []
+            waiters: [],
+            waitersInfo: {}
         }
     }
 
@@ -25,18 +26,54 @@ export class Waiters extends Component {
                 inn: Auth.getUsername()
             }
         }).then(result => {
+            console.log(result.data)
             this.setState({
                 waiters: result.data.map(entry => {
                     return {
                         id: entry.id,
                         name: entry.name,
-                        rating: 'NA',
-                        tips_total: 'NA',
+                        rating: null,
+                        tips_total: null,
                         cardNumber: entry.cardNumber
                     }
                 })
             });
+            this.loadWaitersRating()
         });
+    }
+
+    loadWaitersRating() {
+        axios.get('/api/listFeedbackByInn', {
+            params: {
+                inn: Auth.getUsername()
+            }
+        }).then(result => {
+            const waiters = {};
+            result.data.forEach(entry => {
+                const id = entry.waiterId;
+                if (id === null) {
+                    return
+                }
+                if (waiters[id] === undefined) {
+                    waiters[id] = {
+                        rate: 0,
+                        cnt: 0
+                    }
+                }
+                waiters[id].rate += entry.rate;
+                waiters[id].cnt++;
+            });
+            for (let key in waiters) {
+                if (waiters.hasOwnProperty(key)) {
+                    waiters[key] = {
+                        avRate: waiters[key].cnt === 0 ? null : waiters[key].rate / waiters[key].cnt
+                    }
+                }
+            }
+            this.setState({
+                waitersInfo: waiters
+            });
+        })
     }
 
     render() {
@@ -53,6 +90,7 @@ export class Waiters extends Component {
                     <div className='waiters-list'>
                         {this.state.waiters.map(waiter =>
                             <WaiterInfo key={waiter.id}
+                                        waiterInfo={this.state.waitersInfo[waiter.id]}
                                         waiter={waiter}/>
                         )}
                     </div>
