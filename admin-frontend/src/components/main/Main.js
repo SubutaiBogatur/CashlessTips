@@ -13,7 +13,7 @@ export class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            inn: Auth.getUsername()
         }
     }
 
@@ -33,7 +33,7 @@ export class Main extends Component {
                     <Route path='/waiters'
                            render={() => <Waiters/>}/>
                     <Route path='/kkts'
-                           render={() => <Kkts/>}/>
+                           render={() => <Kkts inn={this.state.inn}/>}/>
                 </div>
             </BrowserRouter>
         )

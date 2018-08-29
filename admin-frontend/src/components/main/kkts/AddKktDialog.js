@@ -9,6 +9,8 @@ import {
     DialogTitle,
     TextField
 } from "@material-ui/core";
+import axios from 'axios';
+import {Auth} from "../../../util/Auth";
 
 export class AddKktDialog extends Component {
     constructor(props) {
@@ -19,7 +21,14 @@ export class AddKktDialog extends Component {
     }
 
     save() {
-        alert('actual connection to server is wip')
+        axios.get('/api/setFnInfo', {
+            params: {
+                inn: Auth.getUsername(),
+                fn: this.state.number
+            }
+        }).then(res => {
+            console.log(res)
+        })
     }
 
     render() {
@@ -39,14 +48,18 @@ export class AddKktDialog extends Component {
                                    value={this.state.number}
                                    margin='dense'
                                    onChange={event => this.setState({number: event.target.value})}
-                                   label='Номер ККТ (ФН или чо там)'/>
+                                   label='Номер ККТ (ФН)'/>
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.handleClose} color='primary'>
                         Отмена
                     </Button>
-                    <Button onClick={() => this.save()}
+                    <Button onClick={() => {
+                        this.save();
+                        this.props.handleClose();
+                        this.props.updateKkts();
+                    }}
                             color='primary'>
                         Сохранить
                     </Button>

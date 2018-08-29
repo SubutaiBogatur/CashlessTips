@@ -9,6 +9,8 @@ import {
     DialogActions,
     Button
 } from "@material-ui/core";
+import axios from 'axios';
+import {Auth} from "../../../util/Auth";
 
 export class AddWaiterDialog extends Component {
     constructor(props) {
@@ -20,7 +22,15 @@ export class AddWaiterDialog extends Component {
     }
 
     save() {
-        alert('actual connection to server is wip')
+        axios.get('/api/setWaiter', {
+            params: {
+                inn: Auth.getUsername(),
+                name: this.state.name,
+                cardNumber: this.state.cardNumber
+            }
+        }).then(result => {
+            this.props.updateWaiters();
+        })
     }
 
     render() {
@@ -52,7 +62,10 @@ export class AddWaiterDialog extends Component {
                     <Button onClick={this.props.handleClose} color='primary'>
                         Отмена
                     </Button>
-                    <Button onClick={() => this.save()}
+                    <Button onClick={() => {
+                        this.save();
+                        this.props.handleClose();
+                    }}
                             color='primary'>
                         Сохранить
                     </Button>

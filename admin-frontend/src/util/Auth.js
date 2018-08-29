@@ -16,6 +16,10 @@ export class Auth {
         localStorage.setItem(key('token'), token);
     }
 
+    static getUsername() {
+        return localStorage.getItem(key('username'))
+    }
+
     static withAuth(headers) {
         headers['Authorization'] = 'Token ' + localStorage.getItem(key('token'));
         return headers;

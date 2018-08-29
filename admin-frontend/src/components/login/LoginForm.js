@@ -18,21 +18,19 @@ export class LoginForm extends Component {
     }
 
     login() {
-        // axios.post('/api/auth', {
-        //     username: this.state.telegram_uid,
-        //     password: this.state.password,
-        // }, {
-        //     headers: Auth.withCsrf({})
-        // })
-        //     .then(result => {
-        //         if (result.status === 200) {
-        //             Auth.saveCredentials(this.state.telegram_uid, result.data['token']);
-        //             this.props.history.push(defaultPath)
-        //         }
-        //         console.log(result.data)
-        //     });
-        Auth.saveCredentials(this.state.inn, '1111');
-        this.props.history.push(defaultPath)
+        axios.get('/api/setInnInfo', {
+            params :{
+                inn: this.state.inn,
+                // password: this.state.password,
+            }
+        })
+            .then(result => {
+                console.log(result.data);
+                Auth.saveCredentials(this.state.inn, 'token');
+                this.props.history.push(defaultPath)
+            }, error => {
+                console.log(error)
+            });
     }
 
     render() {

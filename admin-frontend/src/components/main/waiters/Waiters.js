@@ -3,33 +3,40 @@ import './Waiters.css'
 import {WaiterInfo} from "./WaiterInfo";
 import {Button} from "@material-ui/core";
 import {AddWaiterDialog} from "./AddWaiterDialog";
+import {Auth} from "../../../util/Auth";
+import axios from 'axios';
 
 export class Waiters extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            addDialogOpen: false
+            addDialogOpen: false,
+            waiters: []
         }
     }
 
+    componentWillMount() {
+        this.loadWaiters()
+    }
+
     loadWaiters() {
-        // TODO
-        return [
-            {
-                id: 1,
-                name: 'Test Testovich',
-                rating: 3.2,
-                tips_total: 10000,
-                card_number: '1234 5678 8765 4321'
-            },
-            {
-                id: 2,
-                name: 'Testinia Testovna',
-                rating: 4.0,
-                tips_total: 20000,
-                card_number: null
+        axios.get('/api/listWaitersByInn', {
+            params: {
+                inn: Auth.getUsername()
             }
-        ]
+        }).then(result => {
+            this.setState({
+                waiters: result.data.map(entry => {
+                    return {
+                        id: entry.id,
+                        name: entry.name,
+                        rating: 'NA',
+                        tips_total: 'NA',
+                        cardNumber: entry.cardNumber
+                    }
+                })
+            });
+        });
     }
 
     render() {
@@ -38,17 +45,20 @@ export class Waiters extends Component {
                 <div className='waiters-wrapper'>
                     <div className='waiters-add-button'>
                         <Button variant='raised'
+                                color='primary'
                                 onClick={() => this.setState({addDialogOpen: true})}>
                             Добавить официанта
                         </Button>
                     </div>
                     <div className='waiters-list'>
-                        {this.loadWaiters().map(waiter =>
-                            <WaiterInfo waiter={waiter}/>
+                        {this.state.waiters.map(waiter =>
+                            <WaiterInfo key={waiter.id}
+                                        waiter={waiter}/>
                         )}
                     </div>
                 </div>
                 <AddWaiterDialog open={this.state.addDialogOpen}
+                                 updateWaiters={() => this.loadWaiters()}
                                  handleClose={() => this.setState({addDialogOpen: false})}/>
             </div>
         )

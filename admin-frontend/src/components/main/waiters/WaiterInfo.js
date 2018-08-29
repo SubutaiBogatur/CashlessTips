@@ -13,6 +13,8 @@ import {
     Button
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import axios from "axios";
+import {Auth} from "../../../util/Auth";
 
 export class WaiterInfo extends Component {
     constructor(props) {
@@ -27,7 +29,15 @@ export class WaiterInfo extends Component {
     }
 
     save() {
-        alert('actual connection to server is wip')
+        axios.get('/api/setWaiter', {
+            params: {
+                inn: Auth.getUsername(),
+                name: this.props.waiter.name,
+                cardNumber: this.state.cardNumber
+            }
+        }).then(result => {
+            console.log(result.data)
+        })
     }
 
     renderCardNumber() {

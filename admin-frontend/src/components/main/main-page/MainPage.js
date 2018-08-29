@@ -1,30 +1,41 @@
 import React, {Component} from 'react';
 import {Paper, Typography, Button, Divider, TextField} from '@material-ui/core';
 import './MainPage.css';
+import axios from 'axios';
+import {Auth} from "../../../util/Auth";
 
 export class MainPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cardNumber: null
+            cardNumber: ''
         }
     }
 
     componentWillMount() {
-        this.setState({
-            cardNumber: this.loadData().cardNumber
-        })
+        this.loadData()
     }
 
     loadData() {
-        // TODO
-        return {
-            cardNumber: null
-        }
+        axios.get('/api/getInnInfo', {
+            params: {
+                inn: Auth.getUsername()
+            }
+        }).then(result => {
+            console.log(result.data)
+            this.setState({
+                cardNumber: result.data.cardNumber === null ? '' : result.data.cardNumber
+            })
+        })
     }
 
     saveCard() {
-        alert('actual connection to server is wip')
+        axios.get('/api/setInnInfo', {
+            params: {
+                inn: Auth.getUsername(),
+                cardNumber: this.state.cardNumber
+            }
+        })
     }
 
     render() {
@@ -58,7 +69,7 @@ export class MainPage extends Component {
                             </div>
                             <Divider/>
                             <div className='main-page-card-block-wrapper'>
-                                {this.state.cardNumber === null &&
+                                {this.state.cardNumber === '' &&
                                 <Typography component='p' style={{fontSize: '18px'}}>
                                     Вы еще не ввели номер карты, безналичные чаевые пока недоступны!
                                 </Typography>}

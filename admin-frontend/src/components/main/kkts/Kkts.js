@@ -11,6 +11,9 @@ import {
     List,
     ListItemSecondaryAction
 } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete'
+import PaymentIcon from '@material-ui/icons/Payment'
+import axios from 'axios'
 import {AddKktDialog} from "./AddKktDialog";
 
 export class Kkts extends Component {
@@ -23,22 +26,24 @@ export class Kkts extends Component {
     }
 
     componentWillMount() {
-        // TODO
-        this.setState({kkts: this.loadKkts()})
+        this.loadKkts();
     }
 
     loadKkts() {
-        // TODO
-        return [
-            {
-                id: 1,
-                number: '123123'
-            },
-            {
-                id: 2,
-                number: '321321'
+        axios.get('/api/listFnByInn', {
+            params: {
+                inn: this.props.inn
             }
-        ]
+        }).then(res => {
+            this.setState({
+                kkts: res.data.map(entry => {
+                    return {
+                        id: entry.fn,
+                        number: entry.fn
+                    }
+                })
+            });
+        })
     }
 
     render() {
@@ -56,11 +61,11 @@ export class Kkts extends Component {
                         {this.state.kkts != null && this.state.kkts.map((kkt, i, arr) => ([
                                 <ListItem key={kkt.id}
                                           className='kkts-list-item'>
-                                    {/*<ListItemAvatar>*/}
-                                    {/*<Avatar>*/}
-                                    {/*<FolderIcon/>*/}
-                                    {/*</Avatar>*/}
-                                    {/*</ListItemAvatar>*/}
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <PaymentIcon/>
+                                        </Avatar>
+                                    </ListItemAvatar>
                                     <ListItemText
                                         primary={'ККТ ' + kkt.number}
                                         // secondary={project.manager_chat === null ?
@@ -70,7 +75,7 @@ export class Kkts extends Component {
                                         <IconButton aria-label='Delete'
                                             // onClick={() => this.handleDeleteButton(project)}
                                         >
-                                            {/*<DeleteIcon/>*/}
+                                            <DeleteIcon/>
                                         </IconButton>
                                     </ListItemSecondaryAction>
                                 </ListItem>,
@@ -80,6 +85,7 @@ export class Kkts extends Component {
                     </List>
                 </div>
                 <AddKktDialog open={this.state.addDialogOpen}
+                              updateKkts={() => this.loadKkts()}
                               handleClose={() => this.setState({addDialogOpen: false})}/>
             </div>
         )
