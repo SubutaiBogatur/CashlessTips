@@ -50,10 +50,6 @@ public class ApiController {
         }
 
         if (innRepository.existsByInn(inn)) {
-            throw new TipsServerException("Such inn was already registered");
-        }
-
-        if (innRepository.existsByInn(inn)) {
             // firstly delete old record
             RegisteredInn innEntity = innRepository.getByInn(inn);
             innRepository.deleteById(innEntity.getId());
@@ -151,7 +147,7 @@ public class ApiController {
     @RequestMapping("/setWaiter")
     public ResponseEntity<Object> setWaiter(@RequestParam(value = "inn") String inn,
                                             @RequestParam(value = "name") String name,
-                                            @RequestParam(value = "name", required = false) String cardNumber) throws TipsServerException {
+                                            @RequestParam(value = "cardNumber", required = false) String cardNumber) throws TipsServerException {
         if (!Utils.validateInn(inn) || !Utils.validateCardNumber(cardNumber)) {
             throw TipsServerException.invalidArguments();
         }
