@@ -16,6 +16,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import axios from "axios";
 import {Auth} from "../../../util/Auth";
 
+function rnd(val) {
+    return Math.round(val * 100) / 100;
+}
+
 export class WaiterInfo extends Component {
     constructor(props) {
         super(props);
@@ -26,6 +30,10 @@ export class WaiterInfo extends Component {
 
     validateCardNumber() {
         return true; // TODO
+    }
+
+    componentWillMount() {
+        // console.log(Math.round(3.23132132132132131 * 100) / 100);
     }
 
     save() {
@@ -68,14 +76,14 @@ export class WaiterInfo extends Component {
                     <div className='waiter-info-top-wrapper'>
                         <div className='waiter-info-rating-wrapper'>
                             <Typography component='p' style={{fontSize: '18px'}}>
-                                Средний рейтинг: {this.props.waiterInfo === undefined ? 'ещё неизвестен' : this.props.waiterInfo.avRate + ' / 5'}
+                                Средний рейтинг: {this.props.waiterInfo === undefined ? 'ещё неизвестен' : rnd(this.props.waiterInfo.avRate) + ' / 5'}
                             </Typography>
                         </div>
-                        <div className='waiter-info-tips-wrapper'>
-                            <Typography component='p' style={{fontSize: '18px'}}>
-                                Полученные чаевые: {this.props.waiter.tips_total} рублей
-                            </Typography>
-                        </div>
+                        {/*<div className='waiter-info-tips-wrapper'>*/}
+                            {/*<Typography component='p' style={{fontSize: '18px'}}>*/}
+                                {/*Полученные чаевые: {this.props.waiter.tips_total} рублей*/}
+                            {/*</Typography>*/}
+                        {/*</div>*/}
                     </div>
                     {this.renderCardNumber()}
                 </ExpansionPanelDetails>
