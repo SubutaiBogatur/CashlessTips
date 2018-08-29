@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios'
 import {Auth} from '../../util/Auth';
 import {Redirect} from 'react-router-dom';
-import {Paper, Button, FormControl, InputLabel, Input} from '@material-ui/core';
+import {Paper, Button, FormControl, InputLabel, Input, Tab, Tabs, AppBar} from '@material-ui/core';
 import './LoginForm.css'
 
 const defaultPath = '/main';
@@ -12,12 +12,36 @@ export class LoginForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            type: 0,
             inn: '',
             password: ''
         }
     }
 
+    handleSubmin() {
+        if (this.state.type === 0) {
+            this.login();
+        } else {
+            this.register();
+        }
+    }
+
     login() {
+        axios.get('/api/getInnInfo', {
+            params :{
+                inn: this.state.inn,
+                // password: this.state.password,
+            }
+        })
+            .then(result => {
+                Auth.saveCredentials(this.state.inn, 'token');
+                this.props.history.push(defaultPath)
+            }, error => {
+                console.log(error)
+            });
+    }
+
+    register() {
         axios.get('/api/setInnInfo', {
             params :{
                 inn: this.state.inn,
@@ -25,7 +49,6 @@ export class LoginForm extends Component {
             }
         })
             .then(result => {
-                console.log(result.data);
                 Auth.saveCredentials(this.state.inn, 'token');
                 this.props.history.push(defaultPath)
             }, error => {
@@ -41,6 +64,10 @@ export class LoginForm extends Component {
         return (
             <div className='login-main'>
                 <Paper className='login-wrapper'>
+                    <Tabs value={this.state.type} onChange={(event, value) => this.setState({type: value})}>
+                        <Tab label="Логин" />
+                        <Tab label="Регистрация" />
+                    </Tabs>
                     <div className='form-control'>
                         <FormControl className='form-element'>
                             <InputLabel htmlFor='name-simple'>ИНН вашей компании</InputLabel>
@@ -63,8 +90,8 @@ export class LoginForm extends Component {
                     {/*</div>*/}
                     <Button variant='contained'
                             color='primary'
-                            onClick={() => this.login()}>
-                        Войти
+                            onClick={() => this.handleSubmin()}>
+                        {this.state.type === 0 ? 'Войти' : 'Зарегистрироваться'}
                     </Button>
                 </Paper>
             </div>

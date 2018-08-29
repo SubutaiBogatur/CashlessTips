@@ -22,7 +22,6 @@ export class MainPage extends Component {
                 inn: Auth.getUsername()
             }
         }).then(result => {
-            console.log(result.data)
             this.setState({
                 cardNumber: result.data.cardNumber === null ? '' : result.data.cardNumber
             })
@@ -51,20 +50,23 @@ export class MainPage extends Component {
                             </Typography>
                             <br/>
                             <Typography component='p' style={{fontSize: '18px'}}>
-                                Здесь Вы можете получить или изменить текущий список контрольно-кассовых техник (ККТ),
-                                а также ознакомиться с оценками и чаевыми, которые были
-                                оставлены для каждого из официантов
+                                Чтобы настроить работу с безналичными чаевыми через наш сервис Вам нужно:
+                                1. Добавить список своих ККТ (контрольно-кассовых техник) через вкладку “ККТ”
+                                2. Добавить официантов через вкладку “Официанты”
+
+                                По этим вкладкам Вы можете изменять список текущих ККТ, а также ознакомиться с оценками
+                                и чаевыми, которые были оставлены для каждого из официантов.
                             </Typography>
                             <div className='main-page-paper-actions'>
                                 <div className='main-page-button-wrapper'>
-                                    <Button variant='raised'
-                                            color='primary'>
-                                        Официанты
-                                    </Button>
-                                    <Button variant='raised'
-                                            color='primary'>
-                                        ККТ
-                                    </Button>
+                                    {/*<Button variant='raised'*/}
+                                            {/*color='primary'>*/}
+                                        {/*Официанты*/}
+                                    {/*</Button>*/}
+                                    {/*<Button variant='raised'*/}
+                                            {/*color='primary'>*/}
+                                        {/*ККТ*/}
+                                    {/*</Button>*/}
                                 </div>
                             </div>
                             <Divider/>
