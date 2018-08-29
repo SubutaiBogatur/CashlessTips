@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="48dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <CheckedTextView
+        android:layout_margin="5dp"
+        android:id="@+id/prc0"
+        android:text="0%"
+        android:background="@drawable/rate_select"
+        android:checked="false"
+        android:gravity="center"
+        android:textAlignment="gravity"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"/>
+
+    <CheckedTextView
+        android:layout_margin="5dp"
+        android:id="@+id/prc5"
+        android:text="5%"
+        android:background="@drawable/rate_select"
+        android:checked="false"
+        android:gravity="center"
+        android:textAlignment="gravity"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"/>
+
+    <CheckedTextView
+        android:layout_margin="5dp"
+        android:id="@+id/prc7"
+        android:text="7%"
+        android:background="@drawable/rate_select"
+        android:checked="false"
+        android:gravity="center"
+        android:textAlignment="gravity"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"/>
+    <CheckedTextView
+        android:layout_margin="5dp"
+        android:id="@+id/prc10"
+        android:text="10%"
+        android:background="@drawable/rate_select"
+        android:checked="true"
+        android:gravity="center"
+        android:textAlignment="gravity"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"/>
+
+    <CheckedTextView
+        android:layout_margin="5dp"
+        android:id="@+id/prc14"
+        android:text="14%"
+        android:background="@drawable/rate_select"
+        android:checked="false"
+        android:gravity="center"
+        android:textAlignment="gravity"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"/>
+</merge>
